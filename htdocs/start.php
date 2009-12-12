@@ -1,33 +1,21 @@
-<html>
+<?php
 
-<head>
- <title>Setting</title>
-</head>
+require_once dirname(__FILE__) . '/../lib/mine/MySmarty.class.php';
+require_once dirname(__FILE__) . '/../lib/mine/DBUtil.class.php';
 
-<body>
+$tpl_name = 'start.tpl';
 
-<p>
-Please enter new user name and password.
-</p>
+$smarty = new MySmarty();
+$smarty->assign('foo', 'bar');
 
-<p>
-<form action="." method="post">
-<table>
- <tr>
-  <th>name</th>
-  <td><input type="text" name="user" /></td>
- </tr>
- <tr>
-  <th>pass</th>
-  <td><input type="text" name="pass" /></td>
- </tr>
- <tr>
-  <td colspan="2"><input type="submit"></td>
- </tr>
-</table>
-</form>
-</p>
+if ($_POST) {
+  if (isset($_POST['user']) && isset($_POST['pass']) &&
+      '' !== $_POST['user'] && '' !== $_POST['pass']) {
+    $dbutil = DBUtil::getInstance();
+    $sth = $dbutil->prepare('INSERT INTO users (user, pass) VALUES ("foo", "bar")');
+    $sth->execute();
+  }
+  $tpl_name = 'start_proc.tpl';
+}
 
-</body>
-
-</html>
+$smarty->display($tpl_name);
